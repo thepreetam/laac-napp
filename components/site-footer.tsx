@@ -70,14 +70,19 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-sea">
+                <a href="mailto:hello@laacpipeline.org" className="hover:text-sea">
                   Contact
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-sea">
+                <Link href="/accessibility" className="hover:text-sea">
                   Accessibility
-                </a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="hover:text-sea">
+                  Privacy
+                </Link>
               </li>
             </ul>
           </div>
