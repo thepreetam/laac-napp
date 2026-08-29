@@ -3,10 +3,17 @@ import { ArrowRight, Users, Briefcase } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { CandidateCard } from '@/components/candidate-card'
 import { getEmployer, matches, rolesForEmployer } from '@/lib/data'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { AuthSignout } from '@/components/auth-signout'
 
 const EMPLOYER_ID = 'baylegal'
 
-export default function EmployerDashboardPage() {
+export default async function EmployerDashboardPage() {
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session?.user) redirect('/login')
+
   const employer = getEmployer(EMPLOYER_ID)
   const employerMatches = matches.filter((m) => m.employerId === EMPLOYER_ID).sort((a, b) => b.score - a.score)
   const employerRoles = rolesForEmployer(EMPLOYER_ID)
@@ -16,7 +23,10 @@ export default function EmployerDashboardPage() {
   return (
     <div className="mx-auto max-w-[1280px] px-6 py-10">
       <p className="font-mono text-xs uppercase tracking-[0.12em] text-gold-deep">Employer dashboard</p>
-      <h1 className="mt-1 font-display text-3xl font-semibold text-ink sm:text-4xl">Welcome back, {employer.name}.</h1>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <h1 className="mt-1 font-display text-3xl font-semibold text-ink sm:text-4xl">Welcome back, {employer.name}.</h1>
+        <AuthSignout />
+      </div>
       <p className="mt-2 max-w-[60ch] text-ink-soft leading-relaxed">
         Here are the candidates matched to your open roles this cycle, ranked by fit.
       </p>

@@ -1,19 +1,31 @@
 import Link from 'next/link'
 import { ArrowRight, Bookmark, Compass } from 'lucide-react'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { ProfileCompleteness } from '@/components/profile-completeness'
 import { DashboardTopMatches } from '@/components/dashboard-top-matches'
+import { AuthSignout } from '@/components/auth-signout'
 import { matches, sampleStudent } from '@/lib/data'
 
-export default function StudentDashboardPage() {
+export default async function StudentDashboardPage() {
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session?.user) redirect('/login')
+
   const topMatches = matches.slice(0, 2)
 
   return (
     <div className="mx-auto max-w-[1280px] px-6 py-10">
       <p className="font-mono text-xs uppercase tracking-[0.12em] text-gold-deep">Student dashboard</p>
-      <h1 className="mt-1 font-display text-3xl font-semibold text-ink sm:text-4xl">
-        Welcome back, {sampleStudent.name.split(' ')[0]}.
-      </h1>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="mt-1 font-display text-3xl font-semibold text-ink sm:text-4xl">
+            Welcome back, {sampleStudent.name.split(' ')[0]}.
+          </h1>
+        </div>
+        <AuthSignout />
+      </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_320px]">
         <div className="flex flex-col gap-6">

@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { signIn, signUp } from '@/lib/auth-client'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 type Persona = 'student' | 'employer'
 
@@ -19,7 +21,7 @@ const COPY = {
   login: {
     eyebrow: 'Welcome back',
     heading: 'Log in to LAAC Pipeline',
-    sub: 'Prototype only — enter any email and password to continue. Nothing is stored.',
+    sub: 'Use your email and password to securely access your LAAC Pipeline workspace.',
     submitLabel: 'Log in',
     switchPrompt: 'New here?',
     switchLabel: 'Create a profile',
@@ -28,7 +30,7 @@ const COPY = {
   signup: {
     eyebrow: 'Get started',
     heading: 'Create your profile',
-    sub: 'Prototype only — this creates a demo account so you can see how matching works.',
+    sub: 'Create a secure account to build your profile and receive tailored public-interest matches.',
     submitLabel: 'Create profile',
     switchPrompt: 'Already have an account?',
     switchLabel: 'Log in',
@@ -43,21 +45,29 @@ export function AuthForm({ mode }: AuthFormProps) {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [submitting, setSubmitting] = React.useState(false)
+  const [error, setError] = React.useState('')
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setSubmitting(true)
+    setError('')
 
-    const destination =
-      mode === 'signup'
-        ? persona === 'student'
-          ? '/onboarding/student'
-          : '/onboarding/employer'
-        : persona === 'student'
-          ? '/app'
-          : '/employers/dashboard'
+    const result = mode === 'signup'
+      ? await signUp.email({ email, password, name: persona === 'student' ? 'LAAC Pipeline member' : 'Legal aid employer' })
+      : await signIn.email({ email, password })
+
+    if (result.error) {
+      setError('We could not complete that request. Check your details and try again.')
+      setSubmitting(false)
+      return
+    }
+
+    const destination = mode === 'signup'
+      ? persona === 'student' ? '/onboarding/student' : '/onboarding/employer'
+      : persona === 'student' ? '/app' : '/employers/dashboard'
 
     router.push(destination)
+    router.refresh()
   }
 
   return (
@@ -84,6 +94,12 @@ export function AuthForm({ mode }: AuthFormProps) {
           <TabsTrigger value="employer">I&rsquo;m an employer</TabsTrigger>
         </TabsList>
       </Tabs>
+
+      {error ? (
+        <Alert variant="destructive" className="mt-6" role="alert">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      ) : null}
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-5">
         <div className="flex flex-col gap-2">
