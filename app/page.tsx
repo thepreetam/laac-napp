@@ -27,16 +27,23 @@ export default function HomePage() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="min-h-12 bg-sea px-6 text-base text-paper hover:bg-sea-bright">
-                <Link href="/onboarding/student" data-no-underline>
-                  I&rsquo;m a student
-                  <ArrowRight className="size-4" data-icon="inline-end" />
-                </Link>
+              <Button
+                size="lg"
+                nativeButton={false}
+                className="min-h-12 bg-sea px-6 text-base text-paper hover:bg-sea-bright"
+                render={<Link href="/onboarding/student" data-no-underline />}
+              >
+                I&rsquo;m a student
+                <ArrowRight className="size-4" data-icon="inline-end" />
               </Button>
-              <Button asChild size="lg" variant="outline" className="min-h-12 px-6 text-base">
-                <Link href="/onboarding/employer" data-no-underline>
-                  I&rsquo;m hiring
-                </Link>
+              <Button
+                size="lg"
+                variant="outline"
+                nativeButton={false}
+                className="min-h-12 px-6 text-base"
+                render={<Link href="/onboarding/employer" data-no-underline />}
+              >
+                I&rsquo;m hiring
               </Button>
             </div>
 
@@ -76,7 +83,7 @@ export default function HomePage() {
             title="Pre-bar hire"
             promise="Full-time work under Rule 9.42 supervision before your results arrive."
             whoFor="Grads ready to start casework immediately."
-            href="/pathways"
+            href="/fellowships"
             accent="sea"
           />
           <PathwayCard
@@ -84,7 +91,7 @@ export default function HomePage() {
             title="Internship"
             promise="Part-time, semester-based experience alongside coursework."
             whoFor="1Ls and 2Ls exploring public interest."
-            href="/pathways"
+            href="/fellowships"
             accent="sage"
           />
           <PathwayCard
@@ -92,7 +99,7 @@ export default function HomePage() {
             title="Rural placement"
             promise="Generalist practice in an under-served county, often with housing support."
             whoFor="Students open to relocating outside major metros."
-            href="/pathways"
+            href="/fellowships"
             accent="clay"
           />
         </div>
@@ -122,11 +129,14 @@ export default function HomePage() {
                 You tell us your skills, interests, languages, geography, and timing. We weigh those factors and show
                 you ranked matches with plain-language reasons — not a black box, and not a chat window.
               </p>
-              <Button asChild variant="outline" className="mt-6">
-                <Link href="/how-matching-works" data-no-underline>
-                  Read the full explanation
-                  <ArrowRight className="size-4" data-icon="inline-end" />
-                </Link>
+              <Button
+                variant="outline"
+                nativeButton={false}
+                className="mt-6"
+                render={<Link href="/how-matching-works" data-no-underline />}
+              >
+                Read the full explanation
+                <ArrowRight className="size-4" data-icon="inline-end" />
               </Button>
             </div>
             <ol className="flex flex-col gap-4">

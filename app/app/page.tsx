@@ -36,10 +36,13 @@ export default function StudentDashboardPage() {
         <div className="flex flex-col gap-6">
           <section className="rounded-md border border-line bg-card p-6">
             <ProfileCompleteness percent={85} />
-            <Button asChild variant="outline" className="mt-4 w-full">
-              <Link href="/app/profile" data-no-underline>
-                Complete your profile
-              </Link>
+            <Button
+              variant="outline"
+              nativeButton={false}
+              className="mt-4 w-full"
+              render={<Link href="/app/profile" data-no-underline />}
+            >
+              Complete your profile
             </Button>
           </section>
 

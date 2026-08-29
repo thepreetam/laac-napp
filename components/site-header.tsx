@@ -8,8 +8,7 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 const NAV = [
-  { href: '/pathways', label: 'Pathways' },
-  { href: '/fellowships', label: 'Fellowships' },
+  { href: '/fellowships', label: 'Pathways' },
   { href: '/employers', label: 'Find employers' },
   { href: '/app/matches', label: 'Matching' },
   { href: '/for-schools', label: 'For schools' },
@@ -63,15 +62,20 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Button asChild variant="ghost" className="text-ink-soft hover:text-ink">
-            <Link href="/login" data-no-underline>
-              Employer login
-            </Link>
+          <Button
+            variant="ghost"
+            nativeButton={false}
+            className="text-ink-soft hover:text-ink"
+            render={<Link href="/login" data-no-underline />}
+          >
+            Employer login
           </Button>
-          <Button asChild className="bg-sea text-paper hover:bg-sea-bright">
-            <Link href="/signup" data-no-underline>
-              Create profile
-            </Link>
+          <Button
+            nativeButton={false}
+            className="bg-sea text-paper hover:bg-sea-bright"
+            render={<Link href="/signup" data-no-underline />}
+          >
+            Create profile
           </Button>
         </div>
 
@@ -100,15 +104,21 @@ export function SiteHeader() {
             </Link>
           ))}
           <div className="mt-2 flex flex-col gap-2 border-t border-line pt-4">
-            <Button asChild variant="outline" onClick={() => setMobileOpen(false)}>
-              <Link href="/login" data-no-underline>
-                Employer login
-              </Link>
+            <Button
+              variant="outline"
+              nativeButton={false}
+              onClick={() => setMobileOpen(false)}
+              render={<Link href="/login" data-no-underline />}
+            >
+              Employer login
             </Button>
-            <Button asChild className="bg-sea text-paper hover:bg-sea-bright" onClick={() => setMobileOpen(false)}>
-              <Link href="/signup" data-no-underline>
-                Create profile
-              </Link>
+            <Button
+              nativeButton={false}
+              className="bg-sea text-paper hover:bg-sea-bright"
+              onClick={() => setMobileOpen(false)}
+              render={<Link href="/signup" data-no-underline />}
+            >
+              Create profile
             </Button>
           </div>
         </nav>
