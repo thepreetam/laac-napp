@@ -172,6 +172,21 @@
   --sidebar-ring: var(--sea-bright);
 }
 
+/* Staff mode brand-alternative toggle: swaps the cool sea accent for a warmer gold
+   across every bg-sea/text-sea/border-sea usage, since --sea is a live CSS variable. */
+html:not(.dark)[data-brand='gold'] {
+  --sea: var(--gold-deep);
+  --sea-bright: var(--gold);
+  --primary: var(--gold-deep);
+  --ring: var(--gold-deep);
+}
+html.dark[data-brand='gold'] {
+  --sea: var(--gold);
+  --sea-bright: var(--gold-deep);
+  --primary: var(--gold);
+  --ring: var(--gold);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import { Fraunces, Source_Sans_3, IBM_Plex_Mono } from 'next/font/google'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { AccessibilityProvider } from '@/components/accessibility-controls'
+import { StaffModeProvider } from '@/components/staff-mode'
 import { PrototypeBanner } from '@/components/prototype-banner'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
@@ -73,10 +74,12 @@ export default function RootLayout({
         </a>
         <AccessibilityProvider>
           <TooltipProvider>
-            <PrototypeBanner />
-            <SiteHeader />
-            <main id="main-content">{children}</main>
-            <SiteFooter />
+            <StaffModeProvider>
+              <PrototypeBanner />
+              <SiteHeader />
+              <main id="main-content">{children}</main>
+              <SiteFooter />
+            </StaffModeProvider>
           </TooltipProvider>
         </AccessibilityProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
