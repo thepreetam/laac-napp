@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { ArrowRight, Bookmark, Compass } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ProfileCompleteness } from '@/components/profile-completeness'
-import { MatchCard } from '@/components/match-card'
+import { DashboardTopMatches } from '@/components/dashboard-top-matches'
 import { matches, sampleStudent } from '@/lib/data'
 
 export default function StudentDashboardPage() {
@@ -25,11 +25,7 @@ export default function StudentDashboardPage() {
                 <ArrowRight className="size-3.5" aria-hidden="true" />
               </Link>
             </div>
-            <div className="flex flex-col gap-4">
-              {topMatches.map((m) => (
-                <MatchCard key={m.id} match={m} onOpenWhy={() => {}} />
-              ))}
-            </div>
+            <DashboardTopMatches matches={topMatches} />
           </section>
         </div>
 
