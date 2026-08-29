@@ -341,3 +341,52 @@ export const fellowshipSampleTerms = {
   duration: '6 months',
   hostOverhead: '$1,500',
 }
+
+export interface PartnerSchool {
+  id: string
+  name: string
+  city: string
+  studentsPlaced: number
+  partnerSince: number
+}
+
+export const partnerSchools: PartnerSchool[] = [
+  { id: 'uc-law-sf', name: 'UC Law SF', city: 'San Francisco', studentsPlaced: 34, partnerSince: 2019 },
+  { id: 'berkeley-law', name: 'UC Berkeley School of Law', city: 'Berkeley', studentsPlaced: 41, partnerSince: 2018 },
+  { id: 'ucla-law', name: 'UCLA School of Law', city: 'Los Angeles', studentsPlaced: 38, partnerSince: 2018 },
+  { id: 'usc-gould', name: 'USC Gould School of Law', city: 'Los Angeles', studentsPlaced: 22, partnerSince: 2020 },
+  { id: 'davis-law', name: 'UC Davis School of Law', city: 'Davis', studentsPlaced: 27, partnerSince: 2019 },
+  { id: 'santa-clara-law', name: 'Santa Clara University School of Law', city: 'Santa Clara', studentsPlaced: 19, partnerSince: 2021 },
+  { id: 'golden-gate-law', name: 'Golden Gate University School of Law', city: 'San Francisco', studentsPlaced: 16, partnerSince: 2020 },
+  { id: 'mccombs-law', name: 'McGeorge School of Law', city: 'Sacramento', studentsPlaced: 24, partnerSince: 2019 },
+  { id: 'la-verne-law', name: 'University of La Verne College of Law', city: 'Ontario', studentsPlaced: 11, partnerSince: 2022 },
+  { id: 'san-diego-law', name: 'University of San Diego School of Law', city: 'San Diego', studentsPlaced: 15, partnerSince: 2021 },
+]
+
+export const careerServicesFaqs = [
+  {
+    question: 'Is there a cost to become a partner school?',
+    answer:
+      'No. LAAC Pipeline is free for law schools and their students. We are funded by grants and host organization contributions, not tuition or placement fees.',
+  },
+  {
+    question: 'How do students at our school get access?',
+    answer:
+      'Once your career services office signs a partnership agreement, we add your school to the verified-student list. Students sign up with their school-issued email and are matched immediately.',
+  },
+  {
+    question: 'Can career services staff see student matches?',
+    answer:
+      'Only with student consent. Students can opt to share their match activity and outcomes with your office for advising purposes, but this is off by default.',
+  },
+  {
+    question: 'Do you track outcomes we can report to our dean or accreditation bodies?',
+    answer:
+      'Yes. Partner schools receive an aggregated placement report each spring and fall covering fellowship starts, pre-bar hires, and regional distribution for your students.',
+  },
+  {
+    question: 'What is the difference between this and our existing OCI or symplicity board?',
+    answer:
+      'LAAC Pipeline is purpose-built for legal aid and public interest hiring, with matching based on practice area, county, language, and bar timeline rather than a static job board.',
+  },
+]
