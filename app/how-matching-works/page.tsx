@@ -102,14 +102,11 @@ export default function HowMatchingWorksPage() {
             Complete the onboarding and we will rank every open role for you.
           </p>
         </div>
-        <Button
-          size="lg"
-          nativeButton={false}
-          className="shrink-0 bg-sea text-paper hover:bg-sea/90"
-          render={<Link href="/onboarding/student" data-no-underline />}
-        >
-          Start matching
-          <ArrowRight className="size-4" data-icon="inline-end" />
+        <Button size="lg" asChild className="shrink-0 bg-sea text-paper hover:bg-sea/90">
+          <Link href="/onboarding/student" data-no-underline>
+            Start matching
+            <ArrowRight className="size-4" data-icon="inline-end" />
+          </Link>
         </Button>
       </div>
     </div>

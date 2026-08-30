@@ -92,7 +92,7 @@ export function MatchingApp() {
     })
 
     return list
-  }, [practiceArea, preBarOnly, hybridOnly, sort])
+  }, [allMatches, practiceArea, preBarOnly, hybridOnly, sort])
 
   function openWhy(match: Match) {
     setActiveMatch(match)
@@ -243,12 +243,10 @@ function EmptyState({ onClear }: { onClear: () => void }) {
         <Button onClick={onClear} variant="outline">
           Clear filters
         </Button>
-        <Button
-          nativeButton={false}
-          className="bg-sea text-paper hover:bg-sea-bright"
-          render={<Link href="/onboarding/student" data-no-underline />}
-        >
-          Finish onboarding
+        <Button asChild className="bg-sea text-paper hover:bg-sea-bright">
+          <Link href="/onboarding/student" data-no-underline>
+            Finish onboarding
+          </Link>
         </Button>
       </div>
     </div>

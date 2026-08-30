@@ -18,6 +18,7 @@ export function MatchDrawer({ match, open, onOpenChange }: { match: Match | null
   if (!match) return null
   const employer = getEmployer(match.employerId)
   const role = getRole(match.roleId)
+  if (!role) return null
   const breakdown = (match as any).breakdown || {}
   const totalMax = FACTOR_META.reduce((s, f) => s + f.max, 0)
 
@@ -26,8 +27,10 @@ export function MatchDrawer({ match, open, onOpenChange }: { match: Match | null
       <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-md">
         <SheetHeader>
           <SheetTitle className="font-display text-2xl">Why you matched</SheetTitle>
-          <SheetDescription>
-            {role ? `${role.title}` : 'Role'} {employer ? `at ${employer.name}` : ''}
+          <SheetDescription asChild>
+            <span>
+              {role ? role.title : 'Role'}{employer ? ` at ${employer.name}` : ''}
+            </span>
           </SheetDescription>
         </SheetHeader>
 
@@ -83,10 +86,10 @@ export function MatchDrawer({ match, open, onOpenChange }: { match: Match | null
           )}
 
           <div className="flex flex-wrap items-center gap-2 border-t border-line pt-4 text-sm text-ink-soft">
-            <span>Practice area: {role.practiceArea}</span>
+            <span>Practice area: {role?.practiceArea ?? 'N/A'}</span>
             <span aria-hidden="true">·</span>
-            <span>{role.county} County</span>
-            {role.preBarHire && (
+            <span>{role?.county ?? 'N/A'} County</span>
+            {role?.preBarHire && (
               <Badge className="border-clay/40 bg-clay/10 text-clay">Pre-bar hire</Badge>
             )}
           </div>
