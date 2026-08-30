@@ -6,19 +6,20 @@ import { getEmployer, getRole } from '@/lib/data'
 import type { Match } from '@/lib/types'
 import { cn } from '@/lib/utils'
 
-const FACTORS = [
-  { key: 'skills', label: 'Skills', weight: 30, color: 'bg-sea' },
-  { key: 'interests', label: 'Interests', weight: 25, color: 'bg-sage' },
-  { key: 'language', label: 'Language', weight: 20, color: 'bg-gold' },
-  { key: 'geography', label: 'Geography', weight: 15, color: 'bg-clay' },
-  { key: 'timing', label: 'Timing', weight: 10, color: 'bg-ink-soft' },
+const FACTOR_META = [
+  { key: 'skills', label: 'Skills', max: 30, color: 'bg-sea' },
+  { key: 'interests', label: 'Interests', max: 25, color: 'bg-sage' },
+  { key: 'language', label: 'Language', max: 20, color: 'bg-gold' },
+  { key: 'geography', label: 'Geography', max: 15, color: 'bg-clay' },
+  { key: 'timing', label: 'Timing', max: 10, color: 'bg-ink-soft' },
 ] as const
 
 export function MatchDrawer({ match, open, onOpenChange }: { match: Match | null; open: boolean; onOpenChange: (v: boolean) => void }) {
   if (!match) return null
   const employer = getEmployer(match.employerId)
   const role = getRole(match.roleId)
-  if (!employer || !role) return null
+  const breakdown = (match as any).breakdown || {}
+  const totalMax = FACTOR_META.reduce((s, f) => s + f.max, 0)
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -26,7 +27,7 @@ export function MatchDrawer({ match, open, onOpenChange }: { match: Match | null
         <SheetHeader>
           <SheetTitle className="font-display text-2xl">Why you matched</SheetTitle>
           <SheetDescription>
-            {role.title} at {employer.name}
+            {role ? `${role.title}` : 'Role'} {employer ? `at ${employer.name}` : ''}
           </SheetDescription>
         </SheetHeader>
 
@@ -38,18 +39,22 @@ export function MatchDrawer({ match, open, onOpenChange }: { match: Match | null
             </div>
 
             <div className="mt-3 flex h-2.5 w-full overflow-hidden rounded-full bg-paper-2" aria-hidden="true">
-              {FACTORS.map((f) => (
-                <div key={f.key} className={cn(f.color)} style={{ width: `${f.weight}%` }} />
-              ))}
+              {FACTOR_META.map((f) => {
+                const earned = breakdown[f.key] ?? 0
+                return <div key={f.key} className={cn(f.color)} style={{ width: `${(earned / totalMax) * 100}%` }} />
+              })}
             </div>
             <dl className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink-soft">
-              {FACTORS.map((f) => (
-                <div key={f.key} className="flex items-center gap-1.5">
-                  <span className={cn('size-2 rounded-full', f.color)} aria-hidden="true" />
-                  <dt>{f.label}</dt>
-                  <dd className="font-mono">{f.weight}%</dd>
-                </div>
-              ))}
+              {FACTOR_META.map((f) => {
+                const earned = breakdown[f.key] ?? 0
+                return (
+                  <div key={f.key} className="flex items-center gap-1.5">
+                    <span className={cn('size-2 rounded-full', f.color)} aria-hidden="true" />
+                    <dt>{f.label}</dt>
+                    <dd className="font-mono">{earned}/{f.max}</dd>
+                  </div>
+                )
+              })}
             </dl>
           </div>
 

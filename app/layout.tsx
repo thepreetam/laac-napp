@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Fraunces, Source_Sans_3, IBM_Plex_Mono } from 'next/font/google'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { AuthProvider } from '@/lib/auth-context'
 import { AccessibilityProvider } from '@/components/accessibility-controls'
 import { StaffModeProvider } from '@/components/staff-mode'
 import { PrototypeBanner } from '@/components/prototype-banner'
@@ -72,16 +73,18 @@ export default function RootLayout({
         >
           Skip to content
         </a>
-        <AccessibilityProvider>
-          <TooltipProvider>
+        <AuthProvider>
+          <AccessibilityProvider>
+            <TooltipProvider>
             <StaffModeProvider>
               <PrototypeBanner />
               <SiteHeader />
               <main id="main-content">{children}</main>
               <SiteFooter />
             </StaffModeProvider>
-          </TooltipProvider>
-        </AccessibilityProvider>
+            </TooltipProvider>
+          </AccessibilityProvider>
+        </AuthProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

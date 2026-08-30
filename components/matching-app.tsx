@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/select'
 import { MatchCard } from '@/components/match-card'
 import { MatchDrawer } from '@/components/match-drawer'
-import { matches as allMatches, getEmployer, getRole } from '@/lib/data'
+import { getRole } from '@/lib/data'
 import type { Match, PracticeArea } from '@/lib/types'
 
 const PRACTICE_AREAS: PracticeArea[] = [
@@ -35,6 +35,8 @@ const PRACTICE_AREAS: PracticeArea[] = [
 type SortMode = 'fit' | 'closest' | 'soonest'
 
 export function MatchingApp() {
+  const [allMatches, setAllMatches] = React.useState<Match[]>([])
+  const [loading, setLoading] = React.useState(true)
   const [practiceArea, setPracticeArea] = React.useState<string>('all')
   const [preBarOnly, setPreBarOnly] = React.useState(false)
   const [hybridOnly, setHybridOnly] = React.useState(false)
@@ -43,10 +45,30 @@ export function MatchingApp() {
   const [drawerOpen, setDrawerOpen] = React.useState(false)
   const [filtersOpen, setFiltersOpen] = React.useState(false)
 
+  React.useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch('/api/matches', { credentials: 'include' })
+        const data = await res.json()
+        if (data.success && data.data?.matches) {
+          setAllMatches(data.data.matches)
+        }
+      } catch {
+        // fallback — empty
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [])
+
   const filtered = React.useMemo(() => {
     let list = allMatches.filter((m) => {
       const role = getRole(m.roleId)
-      if (!role) return false
+      if (!role) {
+        // custom role — still show
+        return true
+      }
       if (practiceArea !== 'all' && role.practiceArea !== practiceArea) return false
       if (preBarOnly && !role.preBarHire) return false
       if (hybridOnly && !role.hybrid) return false
@@ -85,6 +107,14 @@ export function MatchingApp() {
 
   const hasFilters = practiceArea !== 'all' || preBarOnly || hybridOnly
 
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-[1280px] px-6 py-10">
+        <p className="text-ink-soft">Computing your matches...</p>
+      </div>
+    )
+  }
+
   return (
     <div className="mx-auto max-w-[1280px] px-6 py-10">
       <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
@@ -92,7 +122,7 @@ export function MatchingApp() {
           <p className="font-mono text-xs uppercase tracking-[0.12em] text-gold-deep">Matching</p>
           <h1 className="mt-1 font-display text-3xl font-semibold text-ink sm:text-4xl">Your matches</h1>
           <p className="mt-2 max-w-[52ch] text-ink-soft">
-            Ranked for Maya R. based on housing and DV interests, Spanish, and East Bay / San Joaquin counties.
+            Ranked by your interests, languages, geography, and availability.
           </p>
         </div>
         <Button

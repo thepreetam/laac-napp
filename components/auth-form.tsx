@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useAuth } from '@/lib/auth-context'
 
 type Persona = 'student' | 'employer'
 
@@ -19,7 +20,7 @@ const COPY = {
   login: {
     eyebrow: 'Welcome back',
     heading: 'Log in to LAAC Pipeline',
-    sub: 'Prototype only — enter any email and password to continue. Nothing is stored.',
+    sub: 'Enter your email and password to continue.',
     submitLabel: 'Log in',
     switchPrompt: 'New here?',
     switchLabel: 'Create a profile',
@@ -28,7 +29,7 @@ const COPY = {
   signup: {
     eyebrow: 'Get started',
     heading: 'Create your profile',
-    sub: 'Prototype only — this creates a demo account so you can see how matching works.',
+    sub: 'Sign up to get matched with legal aid opportunities across California.',
     submitLabel: 'Create profile',
     switchPrompt: 'Already have an account?',
     switchLabel: 'Log in',
@@ -38,26 +39,58 @@ const COPY = {
 
 export function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter()
+  const { login, register } = useAuth()
   const copy = COPY[mode]
   const [persona, setPersona] = React.useState<Persona>('student')
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
+  const [firstName, setFirstName] = React.useState('')
+  const [lastName, setLastName] = React.useState('')
   const [submitting, setSubmitting] = React.useState(false)
+  const [error, setError] = React.useState<string | null>(null)
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setSubmitting(true)
+    setError(null)
 
-    const destination =
-      mode === 'signup'
-        ? persona === 'student'
-          ? '/onboarding/student'
-          : '/onboarding/employer'
-        : persona === 'student'
-          ? '/app'
-          : '/employers/dashboard'
+    try {
+      if (mode === 'signup') {
+        const result = await register({
+          email,
+          password,
+          firstName: firstName || email.split('@')[0],
+          lastName: lastName || '',
+          persona,
+        })
+        if (!result.success) {
+          setError(result.message || 'Registration failed')
+          setSubmitting(false)
+          return
+        }
+      } else {
+        const result = await login(email, password)
+        if (!result.success) {
+          setError(result.message || 'Login failed')
+          setSubmitting(false)
+          return
+        }
+      }
 
-    router.push(destination)
+      const destination =
+        mode === 'signup'
+          ? persona === 'student'
+            ? '/onboarding/student'
+            : '/onboarding/employer'
+          : persona === 'student'
+            ? '/app'
+            : '/employers/dashboard'
+
+      router.push(destination)
+    } catch (err: any) {
+      setError(err.message || 'Something went wrong')
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -86,6 +119,33 @@ export function AuthForm({ mode }: AuthFormProps) {
       </Tabs>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-5">
+        {mode === 'signup' && (
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="firstName">First name</Label>
+              <Input
+                id="firstName"
+                required
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="Maya"
+                className="h-12 text-base"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="lastName">Last name</Label>
+              <Input
+                id="lastName"
+                required
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Ruiz"
+                className="h-12 text-base"
+              />
+            </div>
+          </div>
+        )}
+
         <div className="flex flex-col gap-2">
           <Label htmlFor="email">Email</Label>
           <Input
@@ -113,12 +173,18 @@ export function AuthForm({ mode }: AuthFormProps) {
           />
         </div>
 
+        {error && (
+          <div className="rounded-md border border-danger/30 bg-danger/5 px-4 py-3 text-sm text-danger">
+            {error}
+          </div>
+        )}
+
         <Button
           type="submit"
           disabled={submitting}
           className="mt-2 min-h-12 w-full bg-sea text-base text-paper hover:bg-sea-bright"
         >
-          {copy.submitLabel}
+          {submitting ? 'Please wait...' : copy.submitLabel}
           <ArrowRight className="size-4" data-icon="inline-end" />
         </Button>
       </form>

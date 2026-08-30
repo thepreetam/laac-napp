@@ -223,7 +223,19 @@ export function StudentOnboarding() {
           </Button>
         ) : (
           <Button
-            onClick={() => router.push('/app/matches')}
+            onClick={async () => {
+              try {
+                await fetch('/api/profile', {
+                  method: 'PUT',
+                  credentials: 'include',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(data),
+                })
+              } catch {
+                // continue even if save fails — prototype
+              }
+              router.push('/app/matches')
+            }}
             className="min-h-12 bg-sage px-6 text-paper hover:bg-sage/90"
           >
             See my matches

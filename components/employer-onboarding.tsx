@@ -104,7 +104,24 @@ export function EmployerOnboarding() {
             <ArrowRight className="size-4" data-icon="inline-end" />
           </Button>
         ) : (
-          <Button onClick={() => router.push('/employers/dashboard')} className="min-h-12 bg-sage px-6 text-paper hover:bg-sage/90">
+          <Button onClick={async () => {
+            const titleEl = document.getElementById('role-title') as HTMLInputElement | null
+            try {
+              await fetch('/api/roles', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  title: titleEl?.value || 'Untitled role',
+                  preBarHire: willHirePreBar,
+                  rule942,
+                }),
+              })
+            } catch {
+              // continue even if save fails — prototype
+            }
+            router.push('/employers/dashboard')
+          }} className="min-h-12 bg-sage px-6 text-paper hover:bg-sage/90">
             Finish setup
             <ArrowRight className="size-4" data-icon="inline-end" />
           </Button>
