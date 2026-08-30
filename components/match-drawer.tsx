@@ -27,10 +27,8 @@ export function MatchDrawer({ match, open, onOpenChange }: { match: Match | null
       <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-md">
         <SheetHeader>
           <SheetTitle className="font-display text-2xl">Why you matched</SheetTitle>
-          <SheetDescription asChild>
-            <span>
-              {role ? role.title : 'Role'}{employer ? ` at ${employer.name}` : ''}
-            </span>
+          <SheetDescription>
+            {role ? role.title : 'Role'}{employer ? ` at ${employer.name}` : ''}
           </SheetDescription>
         </SheetHeader>
 

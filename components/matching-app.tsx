@@ -243,10 +243,12 @@ function EmptyState({ onClear }: { onClear: () => void }) {
         <Button onClick={onClear} variant="outline">
           Clear filters
         </Button>
-        <Button asChild className="bg-sea text-paper hover:bg-sea-bright">
-          <Link href="/onboarding/student" data-no-underline>
-            Finish onboarding
-          </Link>
+        <Button
+          nativeButton={false}
+          className="bg-sea text-paper hover:bg-sea-bright"
+          render={<Link href="/onboarding/student" data-no-underline />}
+        >
+          Finish onboarding
         </Button>
       </div>
     </div>
