@@ -110,16 +110,18 @@ export default function SavedRolesPage() {
                   <Button size="sm" className="bg-sea text-paper hover:bg-sea-bright" asChild>
                     <Link href="/app/matches" data-no-underline>
                       View
+                      <ArrowRight className="size-4" data-icon="inline-end" />
                     </Link>
                   </Button>
                   <Button
                     size="sm"
-                    variant="ghost"
-                    className="text-danger hover:text-danger"
+                    variant="outline"
+                    className="text-clay hover:text-clay hover:bg-clay/10"
                     onClick={() => removeSaved(item.roleId)}
                     aria-label={`Remove ${item.roleName || 'role'} from saved`}
                   >
-                    <Trash2 className="size-4" />
+                    <Trash2 className="size-4" data-icon="inline-start" />
+                    Remove
                   </Button>
                 </div>
               </div>
