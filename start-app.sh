@@ -19,9 +19,9 @@ APP_PID=$!
 # Wait for server to be ready, then seed demo data
 echo "[LAAC Pipeline] Waiting for server to be ready..."
 for i in $(seq 1 60); do
-  if curl -sf "http://localhost:${PORT:-3000}/api/health" > /dev/null 2>&1; then
+  if node -e "fetch('http://localhost:${PORT:-3000}/api/health').then(r=>{if(r.ok)process.exit(0);else process.exit(1)}).catch(()=>process.exit(1))" 2>/dev/null; then
     echo "[LAAC Pipeline] Server ready. Seeding demo data..."
-    curl -sf "http://localhost:${PORT:-3000}/api/seed" -X POST || true
+    node -e "fetch('http://localhost:${PORT:-3000}/api/seed',{method:'POST'}).then(r=>r.json()).then(d=>console.log(JSON.stringify(d,null,2))).catch(e=>console.error('[Seed Error]',e.message))" || true
     echo "[LAAC Pipeline] Seed complete."
     break
   fi
