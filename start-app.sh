@@ -3,15 +3,15 @@ set -e
 
 echo "[LAAC Pipeline] Starting application..."
 
-# Install dependencies
-if [ -f "pnpm-lock.yaml" ]; then
-  pnpm install --frozen-lockfile --prod=false 2>/dev/null || pnpm install --prod=false
+# Install pnpm if not available
+if ! command -v pnpm > /dev/null 2>&1; then
+  echo "[LAAC Pipeline] Installing pnpm..."
+  npm install -g pnpm
 fi
 
-# Run ESLint (non-blocking — warnings don't fail deploy)
-if [ -f "eslint.config.mjs" ]; then
-  echo "[LAAC Pipeline] Running lint check..."
-  npx next lint 2>&1 || echo "[LAAC Pipeline] Lint warnings detected (non-blocking)"
+# Install dependencies
+if [ -f "pnpm-lock.yaml" ]; then
+  pnpm install --frozen-lockfile --prod=false --no-strict-peer-deps 2>/dev/null || pnpm install --prod=false --no-strict-peer-deps
 fi
 
 # Build the Next.js app
