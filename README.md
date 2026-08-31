@@ -85,9 +85,9 @@ The application seeds three demo accounts on first startup. Use these to explore
 
 | Role | Email | Password | Entry Point |
 |---|---|---|---|
-| **Student** | `demo@lawschool.edu` | `demo123` | `/app` (student dashboard) |
-| **Employer** | `hr@baylegal.org` | `demo123` | `/employers/dashboard` |
-| **Admin** | `admin@laac.org` | `demo123` | `/admin` (admin dashboard) |
+| **Student** | `demo@lawschool.edu` | `demo1234` | `/app` (student dashboard) |
+| **Employer** | `hr@baylegal.org` | `demo1234` | `/employers/dashboard` |
+| **Admin** | `admin@laac.org` | `demo1234` | `/admin` (admin dashboard) |
 
 **Demo student profile (Maya R.):**
 - UC Law SF, graduating 2026
