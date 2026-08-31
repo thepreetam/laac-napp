@@ -9,11 +9,6 @@ if ! command -v pnpm > /dev/null 2>&1; then
   npm install -g pnpm
 fi
 
-# Install dependencies
-if [ -f "pnpm-lock.yaml" ]; then
-  pnpm install --frozen-lockfile --prod=false --no-strict-peer-dependencies 2>/dev/null || pnpm install --prod=false --no-strict-peer-dependencies
-fi
-
 # Build the Next.js app
 echo "[LAAC Pipeline] Building..."
 pnpm run build
