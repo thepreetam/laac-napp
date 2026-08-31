@@ -13,7 +13,7 @@ npm run build
 
 # Start the Next.js server in background
 echo "[LAAC Pipeline] Starting on port ${PORT:-3000}..."
-npm start &
+npm start -- -p ${PORT:-3000} &
 APP_PID=$!
 
 # Wait for server to be ready, then seed demo data
