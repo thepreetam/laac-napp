@@ -79,6 +79,32 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+### Demo Accounts
+
+The application seeds three demo accounts on first startup. Use these to explore different personas:
+
+| Role | Email | Password | Entry Point |
+|---|---|---|---|
+| **Student** | `demo@lawschool.edu` | `demo123` | `/app` (student dashboard) |
+| **Employer** | `hr@baylegal.org` | `demo123` | `/employers/dashboard` |
+| **Admin** | `admin@laac.org` | `demo123` | `/admin` (admin dashboard) |
+
+**Demo student profile (Maya R.):**
+- UC Law SF, graduating 2026
+- Bar status: studying
+- Practice interests: Housing, Domestic violence
+- Languages: Spanish
+- Target counties: Alameda, San Francisco, San Joaquin
+- Needs transit, no car, evenings OK, hybrid OK
+
+The seed runs automatically via `start-app.sh` on deploy, or manually via:
+
+```bash
+curl -X POST http://localhost:3000/api/seed
+```
+
+Seeding is idempotent — running it again after the initial seed is a no-op.
+
 ### Environment Variables
 
 See `.env.template` for all required and optional variables:
