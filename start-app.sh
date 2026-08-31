@@ -8,6 +8,12 @@ if [ -f "pnpm-lock.yaml" ]; then
   pnpm install --frozen-lockfile --prod=false 2>/dev/null || pnpm install --prod=false
 fi
 
+# Run ESLint (non-blocking — warnings don't fail deploy)
+if [ -f "eslint.config.mjs" ]; then
+  echo "[LAAC Pipeline] Running lint check..."
+  pnpm run lint 2>&1 || echo "[LAAC Pipeline] Lint warnings detected (non-blocking)"
+fi
+
 # Build the Next.js app
 echo "[LAAC Pipeline] Building..."
 pnpm run build
