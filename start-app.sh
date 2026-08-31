@@ -11,7 +11,7 @@ fi
 
 # Install dependencies
 if [ -f "pnpm-lock.yaml" ]; then
-  pnpm install --frozen-lockfile --prod=false --no-strict-peer-deps 2>/dev/null || pnpm install --prod=false --no-strict-peer-deps
+  pnpm install --frozen-lockfile --prod=false --no-strict-peer-dependencies 2>/dev/null || pnpm install --prod=false --no-strict-peer-dependencies
 fi
 
 # Build the Next.js app
