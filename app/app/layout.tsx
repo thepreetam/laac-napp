@@ -3,19 +3,19 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Building2, Briefcase, BookOpen, BarChart3, ArrowLeft } from 'lucide-react'
+import { Compass, Bookmark, Briefcase, User, BarChart3 } from 'lucide-react'
 import { useAuth } from '@/lib/auth-context'
 import { cn } from '@/lib/utils'
 
-const NAV = [
-  { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/admin/employers', label: 'Employers', icon: Building2 },
-  { href: '/admin/roles', label: 'Roles', icon: Briefcase },
-  { href: '/admin/resources', label: 'Resources', icon: BookOpen },
-  { href: '/admin/analytics', label: 'Analytics', icon: BarChart3 },
+const STUDENT_NAV = [
+  { href: '/app', label: 'Dashboard', icon: Compass, exact: true },
+  { href: '/app/matches', label: 'Matches', icon: BarChart3 },
+  { href: '/app/saved', label: 'Saved roles', icon: Bookmark },
+  { href: '/app/applications', label: 'Applications', icon: Briefcase },
+  { href: '/app/profile', label: 'Profile', icon: User },
 ]
 
-export function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
   const pathname = usePathname()
 
@@ -39,20 +39,11 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="mx-auto max-w-[1280px] px-6 py-10">
-      <div className="mb-6 flex items-center gap-3">
-        <Link href="/" className="flex items-center gap-1.5 text-sm text-ink-soft hover:text-ink">
-          <ArrowLeft className="size-3.5" aria-hidden="true" />
-          Back to site
-        </Link>
-        <span className="text-ink-soft/40">/</span>
-        <span className="font-mono text-xs uppercase tracking-wide text-gold-deep">Admin</span>
-      </div>
-
-      <div className="grid gap-8 lg:grid-cols-[200px_1fr]">
-        <nav aria-label="Admin" className="flex flex-col gap-1">
-          {NAV.map((item) => {
-            const active = pathname === item.href
+    <div className="mx-auto max-w-[1280px] px-6 py-6">
+      <div className="grid gap-6 lg:grid-cols-[200px_1fr]">
+        <nav aria-label="Student dashboard" className="hidden flex-col gap-1 lg:flex">
+          {STUDENT_NAV.map((item) => {
+            const active = item.exact ? pathname === item.href : pathname.startsWith(item.href)
             return (
               <Link
                 key={item.href}
@@ -69,7 +60,6 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             )
           })}
         </nav>
-
         <div>{children}</div>
       </div>
     </div>

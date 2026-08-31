@@ -3,8 +3,9 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, LogOut, LayoutDashboard } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '@/lib/auth-context'
 import { cn } from '@/lib/utils'
 
 const NAV = [
@@ -16,9 +17,16 @@ const NAV = [
 ]
 
 export function SiteHeader() {
+  const { user, loading, logout } = useAuth()
   const [scrolled, setScrolled] = React.useState(false)
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const pathname = usePathname()
+
+  async function handleLogout() {
+    await logout()
+    setMobileOpen(false)
+    window.location.href = '/'
+  }
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -63,21 +71,46 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Button
-            variant="ghost"
-            nativeButton={false}
-            className="text-ink-soft hover:text-ink"
-            render={<Link href="/login" data-no-underline />}
-          >
-            Employer login
-          </Button>
-          <Button
-            nativeButton={false}
-            className="bg-sea text-paper hover:bg-sea-bright"
-            render={<Link href="/signup" data-no-underline />}
-          >
-            Create profile
-          </Button>
+          {!loading && user ? (
+            <>
+              <Button
+                variant="ghost"
+                nativeButton={false}
+                className="text-ink-soft hover:text-ink"
+                render={<Link href="/app" data-no-underline />}
+              >
+                <LayoutDashboard className="size-4" data-icon="inline-start" />
+                Dashboard
+              </Button>
+              <span className="text-sm text-ink-soft">{user.name?.split(' ')[0] || user.email}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLogout}
+              >
+                <LogOut className="size-3.5" data-icon="inline-start" />
+                Log out
+              </Button>
+            </>
+          ) : !loading ? (
+            <>
+              <Button
+                variant="ghost"
+                nativeButton={false}
+                className="text-ink-soft hover:text-ink"
+                render={<Link href="/login" data-no-underline />}
+              >
+                Employer login
+              </Button>
+              <Button
+                nativeButton={false}
+                className="bg-sea text-paper hover:bg-sea-bright"
+                render={<Link href="/signup" data-no-underline />}
+              >
+                Create profile
+              </Button>
+            </>
+          ) : null}
         </div>
 
         <button
@@ -105,22 +138,43 @@ export function SiteHeader() {
             </Link>
           ))}
           <div className="mt-2 flex flex-col gap-2 border-t border-line pt-4">
-            <Button
-              variant="outline"
-              nativeButton={false}
-              onClick={() => setMobileOpen(false)}
-              render={<Link href="/login" data-no-underline />}
-            >
-              Employer login
-            </Button>
-            <Button
-              nativeButton={false}
-              className="bg-sea text-paper hover:bg-sea-bright"
-              onClick={() => setMobileOpen(false)}
-              render={<Link href="/signup" data-no-underline />}
-            >
-              Create profile
-            </Button>
+            {!loading && user ? (
+              <>
+                <Button
+                  variant="outline"
+                  nativeButton={false}
+                  onClick={() => setMobileOpen(false)}
+                  render={<Link href="/app" data-no-underline />}
+                >
+                  <LayoutDashboard className="size-4" data-icon="inline-start" />
+                  Dashboard
+                </Button>
+                <span className="px-2 text-sm text-ink-soft">{user.name || user.email}</span>
+                <Button variant="ghost" onClick={handleLogout}>
+                  <LogOut className="size-4" data-icon="inline-start" />
+                  Log out
+                </Button>
+              </>
+            ) : !loading ? (
+              <>
+                <Button
+                  variant="outline"
+                  nativeButton={false}
+                  onClick={() => setMobileOpen(false)}
+                  render={<Link href="/login" data-no-underline />}
+                >
+                  Employer login
+                </Button>
+                <Button
+                  nativeButton={false}
+                  className="bg-sea text-paper hover:bg-sea-bright"
+                  onClick={() => setMobileOpen(false)}
+                  render={<Link href="/signup" data-no-underline />}
+                >
+                  Create profile
+                </Button>
+              </>
+            ) : null}
           </div>
         </nav>
       )}
