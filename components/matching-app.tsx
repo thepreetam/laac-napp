@@ -82,7 +82,12 @@ export function MatchingApp() {
         const rb = getRole(b.roleId)
         return new Date(ra?.startDate ?? 0).getTime() - new Date(rb?.startDate ?? 0).getTime()
       }
-      // closest — sample student is in Alameda/SF/San Joaquin, so prioritize those counties
+      // closest — use geo-distance if available, fallback to county matching
+      const aDist = (a as any).distance
+      const bDist = (b as any).distance
+      if (aDist != null && bDist != null) {
+        return aDist - bDist
+      }
       const homeCounties = ['Alameda', 'San Francisco', 'San Joaquin']
       const ra = getRole(a.roleId)
       const rb = getRole(b.roleId)

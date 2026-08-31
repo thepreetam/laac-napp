@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, Bookmark, Compass } from 'lucide-react'
+import { ArrowRight, Bookmark, Compass, Briefcase } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ProfileCompleteness } from '@/components/profile-completeness'
 import { DashboardTopMatches } from '@/components/dashboard-top-matches'
@@ -46,6 +46,14 @@ export default function StudentDashboardPage() {
             <Link href="/app/saved" className="flex items-center gap-2 text-sm font-medium text-ink hover:text-sea">
               <Bookmark className="size-4" aria-hidden="true" />
               Saved roles
+            </Link>
+            <Link href="/app/applications" className="flex items-center gap-2 text-sm font-medium text-ink hover:text-sea">
+              <Briefcase className="size-4" aria-hidden="true" />
+              Applications
+            </Link>
+            <Link href="/app/profile" className="flex items-center gap-2 text-sm font-medium text-ink hover:text-sea">
+              <Compass className="size-4" aria-hidden="true" />
+              Edit profile
             </Link>
             <Link href="/how-matching-works" className="flex items-center gap-2 text-sm font-medium text-ink hover:text-sea">
               <Compass className="size-4" aria-hidden="true" />

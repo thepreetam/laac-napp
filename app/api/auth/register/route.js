@@ -71,6 +71,14 @@ export async function POST(request) {
       cookies.forEach((c) => response.headers.append('Set-Cookie', c))
     }
 
+    // Send welcome email (non-blocking)
+    try {
+      const { sendWelcomeEmail } = require('@/lib/server/mailer')
+      sendWelcomeEmail(email, `${firstName} ${lastName}`).catch(() => {})
+    } catch {
+      // mailer not available — continue
+    }
+
     return response
   } catch (err) {
     console.error('[Register]', err.message || err)

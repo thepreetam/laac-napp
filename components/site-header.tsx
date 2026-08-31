@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils'
 const NAV = [
   { href: '/fellowships', label: 'Pathways' },
   { href: '/employers', label: 'Find employers' },
+  { href: '/resources', label: 'Resources' },
   { href: '/app/matches', label: 'Matching' },
   { href: '/for-schools', label: 'For schools' },
 ]

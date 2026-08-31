@@ -11,7 +11,7 @@ class StoreInterface {
 
   // ── Searchable Content ───────────────────────────────────────
   async createContent(type, title, body, tags, metadata) { throw new Error('Not implemented') }
-  async searchContent(type, query, tags, page, limit) { throw new Error('Not implemented') }
+  async searchContent(type, query, tags, page, limit, options) { throw new Error('Not implemented') }
   async getContent(slug) { throw new Error('Not implemented') }
   async updateContent(slug, fields) { throw new Error('Not implemented') }
   async deleteContent(slug) { throw new Error('Not implemented') }

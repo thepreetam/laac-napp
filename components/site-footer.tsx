@@ -37,6 +37,11 @@ export function SiteFooter() {
                   How matching works
                 </Link>
               </li>
+              <li>
+                <Link href="/resources" className="hover:text-sea">
+                  Resources
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -46,6 +51,11 @@ export function SiteFooter() {
               <li>
                 <Link href="/for-schools" className="hover:text-sea">
                   Career services toolkit
+                </Link>
+              </li>
+              <li>
+                <Link href="/app/applications" className="hover:text-sea">
+                  Applications
                 </Link>
               </li>
               <li>

@@ -82,11 +82,18 @@ class MachaaoStore extends StoreInterface {
     return data?.data ?? null
   }
 
-  async searchContent(type, q = '', tags = [], page = 1, limit = 20) {
-    const params = { type, page: String(page), limit: String(limit) }
+  async searchContent(type, q = '', tags = [], page = 1, limit = 20, options = {}) {
+    const params = { type, page: String(page), limit: String(limit), status: '1' }
     if (q) params.q = q
     if (tags.length > 0) params.tags = tags.join(',')
-    const { data } = await this.apiClient.get('/content', { params })
+    if (options.sort_by) params.sort_by = options.sort_by
+    if (options.sort_order) params.sort_order = options.sort_order
+    if (options.geo_lat) params.geo_lat = String(options.geo_lat)
+    if (options.geo_lon) params.geo_lon = String(options.geo_lon)
+    if (options.geo_distance) params.geo_distance = String(options.geo_distance)
+    if (options.geo_unit) params.geo_unit = options.geo_unit
+    if (options.featured !== undefined) params.featured = String(options.featured)
+    const { data } = await this.apiClient.get('/content/search', { params })
     return data?.data ?? []
   }
 

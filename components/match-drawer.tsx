@@ -1,10 +1,13 @@
 'use client'
 
+import * as React from 'react'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { getEmployer, getRole } from '@/lib/data'
 import type { Match } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { Sparkles, Loader2 } from 'lucide-react'
 
 const FACTOR_META = [
   { key: 'skills', label: 'Skills', max: 30, color: 'bg-sea' },
@@ -15,12 +18,47 @@ const FACTOR_META = [
 ] as const
 
 export function MatchDrawer({ match, open, onOpenChange }: { match: Match | null; open: boolean; onOpenChange: (v: boolean) => void }) {
+  const [aiExplanation, setAiExplanation] = React.useState<string | null>(null)
+  const [aiLoading, setAiLoading] = React.useState(false)
+  const [aiError, setAiError] = React.useState(false)
+
+  React.useEffect(() => {
+    setAiExplanation(null)
+    setAiLoading(false)
+    setAiError(false)
+  }, [match?.id])
+
   if (!match) return null
   const employer = getEmployer(match.employerId)
   const role = getRole(match.roleId)
   if (!role) return null
   const breakdown = (match as any).breakdown || {}
   const totalMax = FACTOR_META.reduce((s, f) => s + f.max, 0)
+
+  async function fetchAiExplanation() {
+    setAiLoading(true)
+    setAiError(false)
+    try {
+      const res = await fetch('/api/explain', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ roleId: match.roleId, employerId: match.employerId }),
+      })
+      const data = await res.json()
+      if (data.success && data.data?.explanation) {
+        setAiExplanation(data.data.explanation)
+      } else if (data.data?.fallback) {
+        setAiExplanation(data.data.fallback)
+      } else {
+        setAiError(true)
+      }
+    } catch {
+      setAiError(true)
+    } finally {
+      setAiLoading(false)
+    }
+  }
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -71,6 +109,48 @@ export function MatchDrawer({ match, open, onOpenChange }: { match: Match | null
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div className="rounded-md border border-sea/20 bg-sea/[0.03] p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Sparkles className="size-4 text-sea" aria-hidden="true" />
+              <h3 className="text-sm font-semibold text-ink">AI career counselor</h3>
+            </div>
+
+            {!aiExplanation && !aiLoading && !aiError && (
+              <div>
+                <p className="text-sm text-ink-soft mb-3">
+                  Get a personalized, conversational explanation of this match from an AI career counselor.
+                </p>
+                <Button
+                  size="sm"
+                  onClick={fetchAiExplanation}
+                  className="bg-sea text-paper hover:bg-sea-bright"
+                >
+                  <Sparkles className="size-3.5" data-icon="inline-start" />
+                  Explain this match
+                </Button>
+              </div>
+            )}
+
+            {aiLoading && (
+              <div className="flex items-center gap-2 text-sm text-ink-soft">
+                <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+                Analyzing your match...
+              </div>
+            )}
+
+            {aiExplanation && (
+              <div className="text-[15px] leading-relaxed text-ink whitespace-pre-line">
+                {aiExplanation}
+              </div>
+            )}
+
+            {aiError && (
+              <p className="text-sm text-ink-soft">
+                AI explanation is not available right now. The structured match reasons above still apply.
+              </p>
+            )}
           </div>
 
           {match.weakSpot && (
