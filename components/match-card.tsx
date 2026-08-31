@@ -15,8 +15,8 @@ function scoreTone(score: number) {
 }
 
 export function MatchCard({ match, onOpenWhy }: { match: Match; onOpenWhy: (match: Match) => void }) {
-  const employer = getEmployer(match.employerId)
-  const role = getRole(match.roleId)
+  const employer = (match as any).employer || getEmployer(match.employerId)
+  const role = (match as any).role || getRole(match.roleId)
   const [saved, setSaved] = React.useState(false)
   const [saving, setSaving] = React.useState(false)
   const [applied, setApplied] = React.useState(false)

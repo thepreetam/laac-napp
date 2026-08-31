@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { getStore } from '@/store'
 import { getSessionFromRequest } from '@/lib/server/session'
 import { computeAllMatches } from '@/lib/server/matcher'
-import { roles as seedRoles, sampleStudent } from '@/lib/data'
+import { roles as seedRoles, sampleStudent, employers as seedEmployers } from '@/lib/data'
 import config from '@/config'
 
 function slugify(str) {
@@ -55,7 +55,13 @@ export async function GET(request) {
   }
 
   // Compute matches
-  const matches = computeAllMatches(student, roles)
+  const rawMatches = computeAllMatches(student, roles)
+
+  // Enrich with employer data so client doesn't need static lookups
+  const matches = rawMatches.map((m) => ({
+    ...m,
+    employer: seedEmployers.find((e) => e.id === m.employerId) || null,
+  }))
 
   return NextResponse.json({
     success: true,

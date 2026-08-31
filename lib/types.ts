@@ -57,6 +57,8 @@ export interface Match {
   reasons: string[]
   weakSpot?: string
   languageOverlap: Language[]
+  role?: Role
+  employer?: Employer
 }
 
 export interface StudentProfile {
