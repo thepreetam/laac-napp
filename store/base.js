@@ -24,6 +24,9 @@ class StoreInterface {
   async getUserPreferences(userId) { throw new Error('Not implemented') }
   async setUserPreferences(userId, prefs) { throw new Error('Not implemented') }
 
+  // ── Password Management ──────────────────────────────────────
+  async resetUserPassword(email, newPassword) { throw new Error('Not implemented') }
+
   // ── Migration ────────────────────────────────────────────────
   async exportUserData(userId) { throw new Error('Not implemented') }
   async importUserData(userId, data) { throw new Error('Not implemented') }

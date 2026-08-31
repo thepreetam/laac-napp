@@ -153,6 +153,30 @@ class MachaaoStore extends StoreInterface {
     return await this.set(`user-${this._slugify(userId)}-preferences`, prefs)
   }
 
+  // ── Password Management ──────────────────────────────────────
+
+  async resetUserPassword(email, newPassword) {
+    // First, find the user by listing all users and matching email
+    try {
+      const { data } = await this.devClient.get(
+        `/developers/apps/${this.appId}/users`,
+        { params: { q: email, limit: 1 } }
+      )
+      const users = data?.data || []
+      const user = users.find((u) => u.email === email)
+      if (!user) {
+        throw new Error(`User ${email} not found`)
+      }
+      await this.devClient.post(
+        `/developers/apps/${this.appId}/users/${user.user_id}/reset-password`,
+        { new_password: newPassword }
+      )
+      return true
+    } catch (err) {
+      throw new Error(`Failed to reset password: ${err.message}`)
+    }
+  }
+
   // ── Migration ────────────────────────────────────────────────
 
   async exportUserData(userId) {
